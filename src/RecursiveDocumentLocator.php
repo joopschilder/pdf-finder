@@ -22,9 +22,19 @@ class RecursiveDocumentLocator
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        return collect($iterator)
-            ->filter(static fn(SplFileInfo $fileInfo) => $fileInfo->isFile())
-            ->filter(static fn(SplFileInfo $fileInfo) => preg_match('/.pdf$/i', $fileInfo->getBasename()))
-            ->map(fn(SplFileInfo $fileInfo) => $this->documentFactory->createDocument($fileInfo));
+        $documents = [];
+        foreach ($iterator as $file) {
+            if ($this->validate($file)) {
+                $documents[] = $this->documentFactory->createDocument($file);
+            }
+        }
+
+        return collect($documents);
+    }
+
+    private function validate(SplFileInfo $file): bool
+    {
+        return $file->isFile()
+            && preg_match('/.pdf$/i', $file->getBasename());
     }
 }

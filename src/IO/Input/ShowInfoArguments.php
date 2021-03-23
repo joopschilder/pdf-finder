@@ -11,12 +11,7 @@ class ShowInfoArguments
 {
     use ArgvAccess;
 
-    private ?string $file;
-
-    public function __construct(?string $file)
-    {
-        $this->file = $file;
-    }
+    private SplFileInfo $file;
 
     public static function createFromGlobals(): self
     {
@@ -24,18 +19,27 @@ class ShowInfoArguments
         return new self(array_shift($arguments));
     }
 
+    public function __construct(?string $file)
+    {
+        $this->guardUnusableFile($file);
+        $this->file = new SplFileInfo($file);
+    }
+
     public function getFile(): SplFileInfo
     {
-        if (is_null($this->file)) {
+        return $this->file;
+    }
+
+    private function guardUnusableFile(string $file): void
+    {
+        if (is_null($file)) {
             throw new MissingFileArgumentException();
         }
-        if (!file_exists($this->file)) {
-            throw new FileNotFoundException($this->file);
+        if (!file_exists($file)) {
+            throw new FileNotFoundException($file);
         }
-        if (!is_readable($this->file)) {
-            throw new FileNotReadableException($this->file);
+        if (!is_readable($file)) {
+            throw new FileNotReadableException($file);
         }
-
-        return new SplFileInfo($this->file);
     }
 }

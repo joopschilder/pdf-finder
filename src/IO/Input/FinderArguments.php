@@ -5,6 +5,7 @@ namespace IO\Input;
 use Filter\DocumentFilter;
 use Filter\FilterFactory;
 use IO\Exception\DirectoryNotFoundException;
+use IO\Exception\DirectoryNotReadableException;
 use IO\Exception\NotADirectoryException;
 
 class FinderArguments
@@ -13,15 +14,6 @@ class FinderArguments
 
     private ?string $directory;
     private array $filters;
-
-    public function __construct(?string $directory, array $filters)
-    {
-        $this->directory = $directory;
-        $this->filters = $filters;
-
-        $factory = new FilterFactory();
-        $this->filters = array_map([$factory, 'createFromString'], $this->filters);
-    }
 
     public static function createFromGlobals(): self
     {
@@ -33,15 +25,17 @@ class FinderArguments
         return new self($dir, $arguments);
     }
 
+    public function __construct(?string $directory, array $filters)
+    {
+        $this->guardUnusableDirectory($directory);
+        $this->directory = realpath($directory);
+
+        $factory = new FilterFactory();
+        $this->filters = array_map([$factory, 'createFromString'], $filters);
+    }
+
     public function getDirectory(): string
     {
-        if (!file_exists($this->directory)) {
-            throw new DirectoryNotFoundException($this->directory);
-        }
-        if (!is_dir($this->directory)) {
-            throw new NotADirectoryException($this->directory);
-        }
-        
         return $this->directory;
     }
 
@@ -51,5 +45,18 @@ class FinderArguments
     public function getFilters(): array
     {
         return $this->filters;
+    }
+
+    private function guardUnusableDirectory(string $directory): void
+    {
+        if (!file_exists($directory)) {
+            throw new DirectoryNotFoundException($directory);
+        }
+        if (!is_dir($directory)) {
+            throw new NotADirectoryException($directory);
+        }
+        if (!is_readable($directory)) {
+            throw new DirectoryNotReadableException($directory);
+        }
     }
 }
