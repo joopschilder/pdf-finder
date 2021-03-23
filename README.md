@@ -17,7 +17,7 @@ To run it, you need [Composer](https://getcomposer.org/) and [PHP >= 7.4](https:
 as [poppler-utils](https://pypi.org/project/poppler-utils/). Installation of poppler-utils on Ubuntu is very simple:
 
 ```sh
-# apt update && apt install poppler-utils
+sudo apt update && sudo apt install poppler-utils
 ```
 
 ## Finding documents: `bin/pdf-finder.php`
@@ -30,25 +30,25 @@ always be the directory. Filters are optional.
 To find every PDF document with 'python' in its path, filename or any metadata field in the ~/Documents folder:
 
 ```sh
-$ bin/pdf-finder.php ~/Documents python
+bin/pdf-finder.php ~/Documents python
 ```
 
 ... with 'python' in the title (metadata property):
 
 ```sh
-$ bin/pdf-finder.php ~/Documents title=python
+bin/pdf-finder.php ~/Documents title=python
 ```
 
 ... with 'ritchie' in the author field and where the title property is set:
 
 ```sh
-$ bin/pdf-finder.php ~/Documents author=ritchie title=
+bin/pdf-finder.php ~/Documents author=ritchie title=
 ```
 
 ... with 'programming' and 'python' in the filename:
 
 ```sh
-$ bin/pdf-finder.php ~/Documents filename=programming filename=python
+bin/pdf-finder.php ~/Documents filename=programming filename=python
 ```
 
 ### Available filters
