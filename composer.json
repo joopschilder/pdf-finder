@@ -1,0 +1,19 @@
+{
+  "name": "joopschilder/pdf-finder",
+  "type": "project",
+  "license": "MIT",
+  "keywords": ["pdf", "documents", "search", "metadata", "info", "portable document format"],
+  "description": "Utility to locate PDF files based on their metadata",
+  "autoload": {
+    "psr-0": {
+      "": [
+        "src"
+      ]
+    }
+  },
+  "require": {
+    "symfony/console": "^5.2",
+    "cocur/slugify": "^4.0",
+    "illuminate/collections": "^8.33"
+  }
+}
