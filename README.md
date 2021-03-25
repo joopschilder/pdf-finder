@@ -20,6 +20,15 @@ as [poppler-utils](https://pypi.org/project/poppler-utils/). Installation of pop
 sudo apt update && sudo apt install poppler-utils
 ```
 
+The scripts are marked as executable so you can easily add them to your PATH. In my case, `~/.local/bin` is in my PATH, so I did the following:
+
+```sh
+ln -s /path/to/repository/bin/pdf-finder.php ~/.local/bin/pdf-finder
+ln -s /path/to/repository/bin/pdf-show-info.php ~/.local/bin/pdf-show-info
+```
+
+Now you can just invoke them with `pdf-finder` and `pdf-show-info` respectively.
+
 ## Finding documents: `bin/pdf-finder.php`
 
 The first executable, `pdf-finder.php`, is used to actually find PDFs based on search terms. The first argument should
